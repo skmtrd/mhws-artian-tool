@@ -337,6 +337,9 @@ function App() {
         </div>
       </dialog>
 
+      <p className="mb-2 text-gray-500 text-xs">
+        種類Nをクリックすると武器種と属性を選択可能
+      </p>
       <div className="overflow-x-auto">
         <table className="w-full min-w-max border-collapse border border-gray-200">
           <thead>
