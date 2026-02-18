@@ -33,8 +33,26 @@ function App() {
   const [selectedGroupSkill, setSelectedGroupSkill] = useState("");
   const [selectedSeriesSkill, setSelectedSeriesSkill] = useState("");
   const [showResetModal, setShowResetModal] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  const showToast = (message: string) => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToastMessage(message);
+    toastTimeoutRef.current = setTimeout(() => {
+      setToastMessage(null);
+      toastTimeoutRef.current = null;
+    }, 1000);
+  };
+
+  useEffect(
+    () => () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     saveState({
@@ -143,6 +161,9 @@ function App() {
 
   const handleNext = () => {
     if (!cursor) return;
+    const label = [selectedGroupSkill, selectedSeriesSkill]
+      .filter(Boolean)
+      .join(" / ");
     setCellData((prev) => ({
       ...prev,
       [cellKey(cursor.col, cursor.row)]: {
@@ -150,6 +171,7 @@ function App() {
         seriesSkill: selectedSeriesSkill || undefined,
       },
     }));
+    showToast(`${label} が入力されました`);
     moveToNext();
   };
 
@@ -159,6 +181,7 @@ function App() {
       ...prev,
       [cellKey(cursor.col, cursor.row)]: { skipped: true },
     }));
+    showToast("スキップしました");
     moveToNext();
   };
 
@@ -187,7 +210,7 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen bg-white p-6 text-gray-900 ${showInputBar ? "pb-40" : ""}`}
+      className={`min-h-screen bg-white p-6 text-gray-900 ${showInputBar ? "pb-48" : ""}`}
     >
       <div className="mb-6 flex flex-col gap-6">
         <div className="flex flex-wrap items-center gap-6">
@@ -423,81 +446,69 @@ function App() {
       </div>
 
       {showInputBar && cursor && (
-        <div className="fixed right-0 bottom-0 left-0 z-50 border-gray-200 border-t bg-white p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-          <div className="mx-auto max-w-4xl">
-            <p className="mb-3 text-gray-600 text-sm">
-              {getHeaderLabel(cursor.col)}・{cursor.row + 1}回目 —
-              厳選結果を入力
-            </p>
-            <div className="flex flex-wrap items-end gap-3">
-              <div className="min-w-[180px]">
-                <label
-                  htmlFor="group-skill"
-                  className="mb-1 block text-gray-600 text-xs"
-                >
-                  グループスキル
-                </label>
-                <select
-                  id="group-skill"
-                  value={selectedGroupSkill}
-                  onChange={(e) => setSelectedGroupSkill(e.target.value)}
-                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 text-sm"
-                >
-                  <option value="">未選択</option>
-                  {GROUP_SKILLS.map((s) => (
-                    <option key={s.ja} value={s.ja}>
-                      {s.ja}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="min-w-[180px]">
-                <label
-                  htmlFor="series-skill"
-                  className="mb-1 block text-gray-600 text-xs"
-                >
-                  シリーズスキル
-                </label>
-                <select
-                  id="series-skill"
-                  value={selectedSeriesSkill}
-                  onChange={(e) => setSelectedSeriesSkill(e.target.value)}
-                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 text-sm"
-                >
-                  <option value="">未選択</option>
-                  {SERIES_SKILLS.map((s) => (
-                    <option key={s.ja} value={s.ja}>
-                      {s.ja}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <button
-                type="button"
-                onClick={handleSkip}
-                className="rounded border border-gray-400 bg-white px-4 py-2 text-gray-600 text-sm transition-colors hover:bg-gray-100"
-                title="メモするほどでもない結果"
+        <div className="fixed right-0 bottom-0 left-0 z-50 border-gray-200 border-t bg-white p-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-5">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="group-skill" className="text-gray-500 text-sm">
+                グループスキル
+              </label>
+              <select
+                id="group-skill"
+                value={selectedGroupSkill}
+                onChange={(e) => setSelectedGroupSkill(e.target.value)}
+                className="min-w-[200px] rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900"
               >
-                ×
-              </button>
-              {canGoBack && (
-                <button
-                  type="button"
-                  onClick={moveToPrev}
-                  className="rounded border border-gray-400 bg-white px-4 py-2 text-gray-600 text-sm transition-colors hover:bg-gray-100"
-                >
-                  一つ戻る
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={handleNext}
-                disabled={!canProceed}
-                className="rounded bg-amber-500 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                次へ
-              </button>
+                <option value="">未選択</option>
+                {GROUP_SKILLS.map((s) => (
+                  <option key={s.ja} value={s.ja}>
+                    {s.ja}
+                  </option>
+                ))}
+              </select>
             </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="series-skill" className="text-gray-500 text-sm">
+                シリーズスキル
+              </label>
+              <select
+                id="series-skill"
+                value={selectedSeriesSkill}
+                onChange={(e) => setSelectedSeriesSkill(e.target.value)}
+                className="min-w-[200px] rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900"
+              >
+                <option value="">未選択</option>
+                {SERIES_SKILLS.map((s) => (
+                  <option key={s.ja} value={s.ja}>
+                    {s.ja}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              type="button"
+              onClick={handleSkip}
+              className="flex h-[52px] items-center rounded-lg border border-gray-400 bg-white px-6 text-base text-gray-600 transition-colors hover:bg-gray-100"
+              title="メモするほどでもない結果"
+            >
+              スキップ
+            </button>
+            {canGoBack && (
+              <button
+                type="button"
+                onClick={moveToPrev}
+                className="flex h-[52px] items-center rounded-lg border border-gray-400 bg-white px-6 text-base text-gray-600 transition-colors hover:bg-gray-100"
+              >
+                一つ戻る
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={!canProceed}
+              className="flex h-[52px] items-center rounded-lg bg-amber-500 px-6 font-medium text-base text-white transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              次へ
+            </button>
           </div>
         </div>
       )}
@@ -505,6 +516,35 @@ function App() {
       {isComplete && (
         <div className="mt-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-800 text-sm">
           入力が完了しました。
+        </div>
+      )}
+
+      {toastMessage && (
+        <div
+          className="toast-enter -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 z-[200]"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex min-w-[280px] max-w-[90vw] flex-col items-center gap-4 rounded-2xl border border-gray-200 bg-white px-10 py-8 shadow-xl ring-1 ring-black/5">
+            <div className="flex size-16 items-center justify-center rounded-full bg-amber-100">
+              <svg
+                className="size-8 text-amber-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <p className="text-center font-semibold text-gray-900 text-xl">
+              {toastMessage}
+            </p>
+          </div>
         </div>
       )}
     </div>
