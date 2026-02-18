@@ -1,0 +1,16 @@
+export const WEAPONS = [
+  { ja: "大剣", en: "Great Sword" },
+  { ja: "太刀", en: "Long Sword" },
+  { ja: "片手剣", en: "Sword & Shield" },
+  { ja: "双剣", en: "Dual Blades" },
+  { ja: "ハンマー", en: "Hammer" },
+  { ja: "狩猟笛", en: "Hunting Horn" },
+  { ja: "ランス", en: "Lance" },
+  { ja: "ガンランス", en: "Gunlance" },
+  { ja: "スラッシュアックス", en: "Switch Axe" },
+  { ja: "チャージアックス", en: "Charge Blade" },
+  { ja: "操虫棍", en: "Insect Glaive" },
+  { ja: "ライトボウガン", en: "Light Bowgun" },
+  { ja: "重弓銃", en: "Heavy Bowgun" },
+  { ja: "弓", en: "Bow" },
+] as const;
