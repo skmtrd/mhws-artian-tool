@@ -520,9 +520,8 @@ function App() {
       )}
 
       {toastMessage && (
-        <div
+        <output
           className="toast-enter -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 z-[200]"
-          role="status"
           aria-live="polite"
         >
           <div className="flex min-w-[280px] max-w-[90vw] flex-col items-center gap-4 rounded-2xl border border-gray-200 bg-white px-10 py-8 shadow-xl ring-1 ring-black/5">
@@ -533,7 +532,9 @@ function App() {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={2}
+                aria-hidden
               >
+                <title>完了</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -545,7 +546,7 @@ function App() {
               {toastMessage}
             </p>
           </div>
-        </div>
+        </output>
       )}
     </div>
   );
