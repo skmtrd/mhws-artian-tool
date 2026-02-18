@@ -287,32 +287,31 @@ function App() {
         ref={dialogRef}
         onCancel={handleResetCancel}
         onClose={handleResetCancel}
-        className="mx-auto max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow-xl backdrop:bg-black/40"
+        className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 m-0 max-h-[90vh] w-full max-w-sm rounded-lg border border-gray-300 bg-white p-6 shadow-lg backdrop:bg-black/30"
       >
-        <h2
-          id="reset-dialog-title"
-          className="mb-4 font-medium text-gray-900 text-lg"
-        >
-          リセットしていいですか？
-        </h2>
-        <p className="mb-6 text-gray-600 text-sm">
-          表の中身のみリセットされます。回数や種類、武器種・属性の設定はそのままです。
-        </p>
-        <div className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={handleResetCancel}
-            className="rounded border border-gray-300 bg-white px-4 py-2 text-gray-700 text-sm transition-colors hover:bg-gray-50"
-          >
-            キャンセル
-          </button>
-          <button
-            type="button"
-            onClick={handleResetConfirm}
-            className="rounded border border-red-300 bg-red-50 px-4 py-2 text-red-700 text-sm transition-colors hover:bg-red-100"
-          >
-            リセット
-          </button>
+        <div className="flex flex-col items-center gap-4 text-center">
+          <h2 id="reset-dialog-title" className="font-medium text-gray-900">
+            リセットしますか？
+          </h2>
+          <p className="text-gray-600 text-sm">
+            表の中身のみリセットされます。回数や種類、武器種・属性の設定はそのままです。
+          </p>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={handleResetCancel}
+              className="rounded border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              onClick={handleResetConfirm}
+              className="rounded border border-red-300 bg-red-50 px-4 py-2 text-red-700 hover:bg-red-100"
+            >
+              リセット
+            </button>
+          </div>
         </div>
       </dialog>
 
