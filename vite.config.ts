@@ -6,7 +6,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base:
     process.env.GITHUB_REPOSITORY !== undefined
-      ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}`
-      : "",
+      ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
+      : "/",
   plugins: [react(), tailwindcss()],
 });
