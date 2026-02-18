@@ -221,7 +221,7 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen bg-white p-6 text-gray-900 ${showInputBar ? "pb-80 md:pb-48" : ""}`}
+      className={`min-h-screen bg-white p-6 text-gray-900 ${showInputBar ? "pb-96 md:pb-48" : ""}`}
     >
       <div className="mb-6 flex flex-col gap-6">
         <div className="flex flex-wrap items-center gap-6">
