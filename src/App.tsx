@@ -479,7 +479,7 @@ function App() {
                 <option value="">未選択</option>
                 {SERIES_SKILLS.map((s) => (
                   <option key={s.ja} value={s.ja}>
-                    {s.ja}
+                    {s.ja} / {s.subJa}
                   </option>
                 ))}
               </select>
