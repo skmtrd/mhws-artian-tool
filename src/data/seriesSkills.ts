@@ -1,4 +1,8 @@
 export const SERIES_SKILLS = [
+  { ja: "黒蝕一体", en: "Black Eclipse" },
+  { ja: "連撃強化", en: "Blast Boost" },
+  { ja: "無傷の重装", en: "Flawless Armor" },
+  { ja: "無尽蔵", en: "Second Wind" },
   { ja: "蛮勇の食卓", en: "Protein Fiend" },
   { ja: "ダークアーツ", en: "Night's Embrace" },
   { ja: "ブラックナイト", en: "Soul of the Dark Knight" },
@@ -6,10 +10,8 @@ export const SERIES_SKILLS = [
   { ja: "レゾナンス", en: "Resonance" },
   { ja: "蒼雷一閃", en: "Azure Bolt" },
   { ja: "灼熱化", en: "Scorcher" },
-  { ja: "連撃強化", en: "Blast Boost" },
   { ja: "雷々響鳴", en: "Thunderous Roar" },
   { ja: "恨撃", en: "Bad Blood" },
-  { ja: "黒蝕一体", en: "Black Eclipse" },
   { ja: "破壊衝動", en: "Decimator" },
   { ja: "加速再生", en: "Hasten Recovery" },
   { ja: "千刃の身躱し", en: "Razor's Edge" },
@@ -21,6 +23,4 @@ export const SERIES_SKILLS = [
   { ja: "泡沫の舞", en: "Bubbly Dance" },
   { ja: "ウォークライ", en: "War Cry" },
   { ja: "地の恵み【夢灯】", en: "Dreamspell Boon" },
-  { ja: "無傷の重装", en: "Flawless Armor" },
-  { ja: "無尽蔵", en: "Second Wind" },
 ] as const;

@@ -1,4 +1,5 @@
 export const GROUP_SKILLS = [
+  { ja: "ヌシの魂", en: "Lord's Soul" },
   { ja: "鱗重ねの工夫", en: "Scaling Layering" },
   { ja: "鱗張りの技法", en: "Scaling Prowess" },
   { ja: "栄光の誉れ", en: "Glory's Favor" },
@@ -13,7 +14,6 @@ export const GROUP_SKILLS = [
   { ja: "護竜の脈動", en: "Guardian's Pulse" },
   { ja: "祝祭の巡り", en: "Festival Spirit" },
   { ja: "先達の導き", en: "Imparted Wisdom" },
-  { ja: "ヌシの魂", en: "Lord's Soul" },
   { ja: "ヌシの憤激", en: "Lord's Fury" },
   { ja: "ヌシの誇り", en: "Lord's Favor" },
 ] as const;

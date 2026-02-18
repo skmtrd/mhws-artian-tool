@@ -3,6 +3,7 @@ import { ATTRIBUTES } from "./data/attributes";
 import { GROUP_SKILLS } from "./data/groupSkills";
 import { SERIES_SKILLS } from "./data/seriesSkills";
 import { WEAPONS } from "./data/weapons";
+import { loadState, saveState } from "./storage";
 
 interface ColumnConfig {
   weapon?: string;
@@ -16,22 +17,35 @@ interface CellData {
 }
 
 function App() {
-  const [count, setCount] = useState(1);
-  const [types, setTypes] = useState(1);
+  const [count, setCount] = useState(() => loadState().count);
+  const [types, setTypes] = useState(() => loadState().types);
   const [columnConfigs, setColumnConfigs] = useState<
     Record<number, ColumnConfig>
-  >({});
+  >(() => loadState().columnConfigs);
   const [editingColumn, setEditingColumn] = useState<number | null>(null);
-  const [isStarted, setIsStarted] = useState(false);
+  const [isStarted, setIsStarted] = useState(() => loadState().isStarted);
   const [cursor, setCursor] = useState<{ col: number; row: number } | null>(
-    null,
+    () => loadState().cursor,
   );
-  const [cellData, setCellData] = useState<Record<string, CellData>>({});
+  const [cellData, setCellData] = useState<Record<string, CellData>>(
+    () => loadState().cellData,
+  );
   const [selectedGroupSkill, setSelectedGroupSkill] = useState("");
   const [selectedSeriesSkill, setSelectedSeriesSkill] = useState("");
   const [showResetModal, setShowResetModal] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    saveState({
+      count,
+      types,
+      columnConfigs,
+      cellData,
+      isStarted,
+      cursor,
+    });
+  }, [count, types, columnConfigs, cellData, isStarted, cursor]);
 
   useEffect(() => {
     if (showResetModal) {
@@ -118,6 +132,14 @@ function App() {
   };
 
   const canGoBack = cursor && (cursor.row > 0 || cursor.col > 0);
+
+  const handleCellClick = (colIndex: number, rowIndex: number) => {
+    setIsStarted(true);
+    setCursor({ col: colIndex, row: rowIndex });
+    const data = cellData[cellKey(colIndex, rowIndex)];
+    setSelectedGroupSkill(data?.groupSkill ?? "");
+    setSelectedSeriesSkill(data?.seriesSkill ?? "");
+  };
 
   const handleNext = () => {
     if (!cursor) return;
@@ -368,23 +390,29 @@ function App() {
                   return (
                     <td
                       key={colIndex}
-                      className={`border border-gray-200 px-4 py-2 text-gray-900 text-sm ${
+                      className={`border border-gray-200 ${
                         isActive
                           ? "bg-amber-100 ring-2 ring-amber-400"
                           : "bg-white"
                       }`}
                     >
-                      {data?.skipped ? (
-                        <span className="text-gray-400">×</span>
-                      ) : data?.groupSkill || data?.seriesSkill ? (
-                        <span>
-                          {[data.groupSkill, data.seriesSkill]
-                            .filter(Boolean)
-                            .join(" / ")}
-                        </span>
-                      ) : (
-                        " "
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleCellClick(colIndex, rowIndex)}
+                        className="w-full cursor-pointer px-4 py-2 text-left text-gray-900 text-sm transition-colors hover:bg-gray-50"
+                      >
+                        {data?.skipped ? (
+                          <span className="text-gray-400">×</span>
+                        ) : data?.groupSkill || data?.seriesSkill ? (
+                          <span>
+                            {[data.groupSkill, data.seriesSkill]
+                              .filter(Boolean)
+                              .join(" / ")}
+                          </span>
+                        ) : (
+                          " "
+                        )}
+                      </button>
                     </td>
                   );
                 })}
