@@ -41,6 +41,7 @@
         "useFragmentSyntax": "error"
       },
       "suspicious": {
+        "noArrayIndexKey": "off",
         "noConsoleLog": "error",
         "noEmptyBlockStatements": "error"
       },
