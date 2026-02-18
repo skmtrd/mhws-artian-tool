@@ -19,6 +19,7 @@ interface CellData {
 function App() {
   const [count, setCount] = useState(() => loadState().count);
   const [types, setTypes] = useState(() => loadState().types);
+  const [partsCount, setPartsCount] = useState(() => loadState().partsCount);
   const [columnConfigs, setColumnConfigs] = useState<
     Record<number, ColumnConfig>
   >(() => loadState().columnConfigs);
@@ -58,12 +59,13 @@ function App() {
     saveState({
       count,
       types,
+      partsCount,
       columnConfigs,
       cellData,
       isStarted,
       cursor,
     });
-  }, [count, types, columnConfigs, cellData, isStarted, cursor]);
+  }, [count, types, partsCount, columnConfigs, cellData, isStarted, cursor]);
 
   useEffect(() => {
     if (showResetModal) {
@@ -214,6 +216,26 @@ function App() {
     >
       <div className="mb-6 flex flex-col gap-6">
         <div className="flex flex-wrap items-center gap-6">
+          <div className="flex items-center gap-2">
+            <label
+              htmlFor="partsCount"
+              className="font-medium text-gray-700 text-sm"
+            >
+              現在持っているパーツの数
+            </label>
+            <select
+              id="partsCount"
+              value={partsCount}
+              onChange={(e) => setPartsCount(Number(e.target.value))}
+              className="rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm"
+            >
+              {Array.from({ length: 2000 }, (_, i) => i + 1).map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="flex items-center gap-2">
             <label
               htmlFor="count"
@@ -445,7 +467,11 @@ function App() {
       </div>
 
       {showInputBar && cursor && (
-        <div className="fixed right-0 bottom-0 left-0 z-50 border-gray-200 border-t bg-white p-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <div className="fixed right-0 bottom-0 left-0 z-50 flex flex-col gap-4 border-gray-200 border-t bg-white p-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+          <div className="mx-auto w-full max-w-6xl text-center text-gray-600 text-sm">
+            推定される現在のパーツの合計 : {partsCount - cursor.row * 3}{" "}
+            (回数確認用)
+          </div>
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-5">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="group-skill" className="text-gray-500 text-sm">

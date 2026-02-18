@@ -3,6 +3,7 @@ const STORAGE_KEY = "wilds-artian-tool";
 export interface StoredState {
   count: number;
   types: number;
+  partsCount: number;
   columnConfigs: Record<number, { weapon?: string; attribute?: string }>;
   cellData: Record<
     string,
@@ -15,6 +16,7 @@ export interface StoredState {
 const DEFAULT_STATE: StoredState = {
   count: 1,
   types: 1,
+  partsCount: 3,
   columnConfigs: {},
   cellData: {},
   isStarted: false,
@@ -40,6 +42,7 @@ export function loadState(): StoredState {
       return {
         count,
         types,
+        partsCount: parsed.partsCount ?? DEFAULT_STATE.partsCount,
         columnConfigs: parsed.columnConfigs ?? DEFAULT_STATE.columnConfigs,
         cellData: parsed.cellData ?? DEFAULT_STATE.cellData,
         isStarted: parsed.isStarted ?? DEFAULT_STATE.isStarted,
