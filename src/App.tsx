@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { ATTRIBUTES } from "./data/attributes";
+import { ATTRIBUTES, ATTRIBUTE_IMAGE_MAP } from "./data/attributes";
 import { GROUP_SKILLS } from "./data/groupSkills";
 import { SERIES_SKILLS } from "./data/seriesSkills";
-import { WEAPONS } from "./data/weapons";
+import { WEAPONS, WEAPON_IMAGE_MAP } from "./data/weapons";
 import { loadState, saveState } from "./storage";
 
 interface ColumnConfig {
@@ -105,6 +105,15 @@ function App() {
     if (config?.weapon) parts.push(config.weapon);
     if (config?.attribute) parts.push(config.attribute);
     return parts.length > 0 ? parts.join(" × ") : `種類${colIndex + 1}`;
+  };
+
+  const getHeaderImages = (colIndex: number) => {
+    const config = columnConfigs[colIndex];
+    const weaponSrc = config?.weapon ? WEAPON_IMAGE_MAP[config.weapon] : null;
+    const attributeSrc = config?.attribute
+      ? ATTRIBUTE_IMAGE_MAP[config.attribute]
+      : null;
+    return { weaponSrc, attributeSrc };
   };
 
   const cellKey = (col: number, row: number) => `${col}_${row}`;
@@ -357,9 +366,37 @@ function App() {
                     onClick={() =>
                       setEditingColumn(editingColumn === i ? null : i)
                     }
-                    className="w-full cursor-pointer rounded px-2 py-1 text-left transition-colors hover:bg-gray-200"
+                    className="flex w-full items-center justify-center gap-1 rounded px-2 py-1 transition-colors hover:bg-gray-200"
+                    title={getHeaderLabel(i)}
                   >
-                    {getHeaderLabel(i)}
+                    {(() => {
+                      const { weaponSrc, attributeSrc } = getHeaderImages(i);
+                      if (weaponSrc || attributeSrc) {
+                        return (
+                          <span className="flex items-center gap-1">
+                            {weaponSrc && (
+                              <img
+                                src={weaponSrc}
+                                alt=""
+                                className="size-6 object-contain"
+                              />
+                            )}
+                            {attributeSrc && (
+                              <img
+                                src={attributeSrc}
+                                alt=""
+                                className="size-6 object-contain"
+                              />
+                            )}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span className="text-left text-gray-600 text-sm">
+                          {getHeaderLabel(i)}
+                        </span>
+                      );
+                    })()}
                   </button>
                   {editingColumn === i && (
                     <div
