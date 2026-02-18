@@ -10,6 +10,7 @@ export const ATTRIBUTES = [
   { category: "状態異常", ja: "爆破", en: "Blast", image: "bomb.png" },
 ] as const;
 
+const BASE = import.meta.env.BASE_URL;
 export const ATTRIBUTE_IMAGE_MAP: Record<string, string> = Object.fromEntries(
-  ATTRIBUTES.map((a) => [a.ja, `/assets/attributes/${a.image}`]),
+  ATTRIBUTES.map((a) => [a.ja, `${BASE}assets/attributes/${a.image}`]),
 );

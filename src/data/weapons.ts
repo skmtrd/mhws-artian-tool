@@ -15,6 +15,7 @@ export const WEAPONS = [
   { ja: "弓", en: "Bow", image: "yumi.avif" },
 ] as const;
 
+const BASE = import.meta.env.BASE_URL;
 export const WEAPON_IMAGE_MAP: Record<string, string> = Object.fromEntries(
-  WEAPONS.map((w) => [w.ja, `/assets/weapons/${w.image}`]),
+  WEAPONS.map((w) => [w.ja, `${BASE}assets/weapons/${w.image}`]),
 );
